@@ -1,9 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  function getHello() {
+    const greet = document.getElementById('greet')
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/hello`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => (greet.innerHTML = JSON.stringify(data)))
+  }
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(getHello)
 
   return (
     <div className="App">
@@ -14,6 +27,9 @@ function App() {
           <button type="button" onClick={() => setCount((count) => count + 1)}>
             count is: {count}
           </button>
+        </p>
+        <p>
+          api called: <code id="greet"></code>
         </p>
         <p>
           Edit <code>App.jsx</code> and save to test HMR updates.
